@@ -35,14 +35,8 @@ type apigenInfo struct {
 	URL     string `json:"url"`
 	Auth    bool   `json:"auth"`
 	Method  string `json:"method"`
-	Handler string
 }
 
-// Route - route
-type route struct {
-	URL        string
-	MethodName string
-}
 
 func main() {
 	fset := token.NewFileSet()
@@ -259,7 +253,7 @@ func CreateBindFunction(out io.Writer, structName string, fields []*ast.Field) {
 				switch field.Type.(*ast.Ident).Name {
 				case "string":
 					fmt.Fprintf(out, "model.%s = r.FormValue(\"%s\") \n", field.Names[0].Name, paramName)
-					ValidateStringField(out,field.Names[0].Name, paramName, vInfo)
+					ValidateStringField(out, field.Names[0].Name, paramName, vInfo)
 					if vInfo.useDefault {
 						fmt.Fprintf(out, `if model.%s == "" {
 			model.%s = "%s"
@@ -273,7 +267,7 @@ if err != nil {
 	return fmt.Errorf("%s must be int")
 }
 model.%s = val
- `,paramName, paramName, field.Names[0].Name)
+ `, paramName, paramName, field.Names[0].Name)
 
 					ValidateIntField(out, field.Names[0].Name, paramName, vInfo)
 				}
